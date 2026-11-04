@@ -46,15 +46,24 @@ def run_remote_python(session: str, code: str, timeout: int = 60) -> str:
 
 
 def ship(session: str, paths: list[str]) -> None:
-    """Upload the committed state of `paths` and unpack it under REMOTE_CODE."""
+    """Upload the committed state of `paths` (default: the whole repo) and unpack it under REMOTE_CODE."""
     with tempfile.TemporaryDirectory() as tmp:
         archive = Path(tmp) / "code.tgz"
-        subprocess.run(["git", "-C", str(REPO), "archive", "-o", str(archive), "HEAD", "--", *paths], check=True)
+        subprocess.run(["git", "-C", str(REPO), "archive", "-o", str(archive), "HEAD", "--", *(paths or ["."])], check=True)
         colab("upload", "-s", session, str(archive), "/content/code.tgz")
     run_remote_python(
         session,
         f"import subprocess; subprocess.run('mkdir -p {REMOTE_CODE} && tar xzf /content/code.tgz -C {REMOTE_CODE}',"
         " shell=True, check=True)",
+    )
+
+
+def install_extra(session: str, extra: str) -> None:
+    """Install the repo's optional dependency group on the VM (Colab already ships torch; extras must not repeat it)."""
+    run_remote_python(
+        session,
+        f"import subprocess; subprocess.run('uv pip install --system -q \"{REMOTE_CODE}[{extra}]\"', shell=True, check=True)",
+        timeout=900,
     )
 
 
@@ -91,10 +100,8 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--gpu", help="T4, L4, G4, A100 or H100; omit for a CPU runtime")
     parser.add_argument("--session", default=f"oncolens-{int(time.time())}", help="Colab session name")
-    parser.add_argument(
-        "--paths", nargs="+", default=["data", "oncolens", "wiki-llm", "pyproject.toml"],
-        help="committed repo paths to ship",
-    )
+    parser.add_argument("--paths", nargs="+", default=[], help="committed repo paths to ship (default: everything)")
+    parser.add_argument("--extra", help="optional dependency group of pyproject.toml to install on the VM first")
     parser.add_argument("--timeout", type=int, default=3600, help="seconds to wait for the command")
     parser.add_argument("--out", type=Path, help="where to keep run.out / run.err (default: temp dir)")
     parser.add_argument("--keep", action="store_true", help="leave the session running afterwards")
@@ -110,8 +117,10 @@ def main() -> int:
     out = args.out or Path(tempfile.mkdtemp(prefix="colab-run-"))
     colab("new", "-s", args.session, *(["--gpu", args.gpu] if args.gpu else []))
     try:
-        print(f"[colab] session {args.session} ({args.gpu or 'cpu'}) up; shipping {args.paths}", file=sys.stderr)
+        print(f"[colab] session {args.session} ({args.gpu or 'cpu'}) up; shipping {args.paths or 'whole repo'}", file=sys.stderr)
         ship(args.session, args.paths)
+        if args.extra:
+            install_extra(args.session, args.extra)
         launch(args.session, command)
         exit_code = wait_for_exit(args.session, args.timeout)
         stdout, stderr = bring_home(args.session, out)

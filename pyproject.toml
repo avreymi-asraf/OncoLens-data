@@ -10,6 +10,8 @@ dependencies = [
 [project.optional-dependencies]
 # Installed on Colab / GPU hosts only; the connection check runs on the light core.
 gpu = ["torch", "transformers", "accelerate"]
+# RL post-training (TRL + LoRA). Colab ships torch/transformers; this adds only what it lacks.
+train = ["trl==1.17.1", "peft==0.21.2"]
 
 [dependency-groups]
 dev = [
