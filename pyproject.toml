@@ -1,0 +1,36 @@
+[project]
+name = "oncolens"
+version = "0.1.0"
+description = "OncoLens benchmark: wiki-driven LLM evaluation over patient-record corpora"
+requires-python = ">=3.11"
+dependencies = [
+    "pyyaml>=6.0.3",
+]
+
+[project.optional-dependencies]
+# Installed on Colab / GPU hosts only; the connection check runs on the light core.
+gpu = ["torch", "transformers", "accelerate"]
+
+[dependency-groups]
+dev = [
+    "ruff",
+    "pyright",
+    "types-pyyaml>=6.0.12.20261103",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["oncolens"]
+
+[tool.ruff]
+line-length = 110
+include = ["oncolens/**/*.py"]  # the benchmark package only; scripts/ and docs are not ours to reformat
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM"]
+
+[tool.pyright]
+include = ["oncolens"]

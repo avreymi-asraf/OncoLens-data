@@ -10,6 +10,7 @@
 
 ## Target Systems (`systems/`)
 * [[systems/hadassah-emr]] — Hadassah oncology EMR: what is known, TODO questions for supervisors/IT (`Status: Placeholder`)
+* [[systems/oncolens-bench]] — OncoLens benchmark: wiki-driven tasks, leak-safe prompts, balanced-accuracy scores, connection check (`Status: Active`)
 
 ## Findings (`findings/`)
 * [[findings/data-source-landscape]] — Three-tier data plan, sources × targets matrix, 10 subsurface insights, next steps (`Confidence: Initial`)
@@ -39,6 +40,8 @@
 * [[datasets/ncdb]] — US hospital registry; not accessible (CoC institutions only)
 * [[datasets/flatiron]] — commercial RWD; endpoint definitions worth copying
 ### Synthetic data
+* [[datasets/msk-chord-mini]] — 60 real MSK-CHORD patients as Markdown records, balanced LIVING/DECEASED; test set
+* [[datasets/synthetic-chord]] — 300 patients sampled from MSK-CHORD aggregates (schema faker, job A); train + test
 * [[datasets/synthea]] — rule-based; breast/CRC/lung/AML/prostate modules; plumbing only
 * [[datasets/synthetic-ehr-generators]] — HALO, CEHR-GPT, TabDDPM, CTGAN, MDClone compared
 * [[datasets/synthetic-clinical-notes]] — Asclepius, longitudinal LLM notes, de-id-vs-synthetic
