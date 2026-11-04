@@ -1,0 +1,1740 @@
+{
+ "about": "Aggregate profile of the MSK-CHORD public release; input of scripts/synthesize.py. No patient-level data.",
+ "cohort_size": 24857,
+ "age_limits": [
+  10,
+  89
+ ],
+ "site_count_bands": {
+  "0 sites": [
+   0,
+   0
+  ],
+  "1-2 sites": [
+   1,
+   2
+  ],
+  "3+ sites": [
+   3,
+   10
+  ]
+ },
+ "os_quantile_levels": [
+  0.05,
+  0.1,
+  0.15,
+  0.2,
+  0.25,
+  0.3,
+  0.35,
+  0.4,
+  0.45,
+  0.5,
+  0.55,
+  0.6,
+  0.65,
+  0.7,
+  0.75,
+  0.8,
+  0.85,
+  0.9,
+  0.95
+ ],
+ "cancer_types": {
+  "Breast Cancer": {
+   "n": 5342,
+   "sex": {
+    "Female": 0.9888,
+    "Male": 0.0112
+   },
+   "age": {
+    "mean": 59.6,
+    "sd": 12.8
+   },
+   "smoking": {
+    "Former/Current Smoker": 0.3104,
+    "Never": 0.6365,
+    "Unknown": 0.0532
+   },
+   "stage": {
+    "Stage 1-3": 0.796,
+    "Stage 4": 0.204
+   },
+   "registry_entries": {
+    "1": 0.8003,
+    "2": 0.1565,
+    "3": 0.0341,
+    "4": 0.0092
+   },
+   "prior_medication": {
+    "No prior medications": 0.5251,
+    "Prior medications to MSK": 0.2297,
+    "Unknown": 0.2452
+   },
+   "biomarkers": {
+    "PD-L1 history": {
+     "reported_rate": 0.1039,
+     "values": {
+      "No": 0.7081,
+      "Yes": 0.2919
+     }
+    },
+    "HR": {
+     "reported_rate": 1.0,
+     "values": {
+      "No": 0.2284,
+      "Yes": 0.7716
+     }
+    },
+    "HER2": {
+     "reported_rate": 1.0,
+     "values": {
+      "No": 0.8383,
+      "Yes": 0.1617
+     }
+    },
+    "Gleason score, highest reported": {
+     "reported_rate": 0.0,
+     "values": {}
+    }
+   },
+   "by_stage": {
+    "Stage 1-3": {
+     "n": 4252,
+     "site_count": {
+      "0": 0.1303,
+      "1": 0.1646,
+      "2": 0.154,
+      "3": 0.1239,
+      "4": 0.1044,
+      "5": 0.1068,
+      "6": 0.104,
+      "7": 0.0675,
+      "8": 0.0329,
+      "9": 0.0094,
+      "10": 0.0021
+     },
+     "site_rate": {
+      "Adrenal Glands": 0.059,
+      "Bone": 0.4687,
+      "CNS/Brain": 0.2603,
+      "Intra Abdominal": 0.1348,
+      "Liver": 0.3848,
+      "Lung": 0.4078,
+      "Lymph Node": 0.5421,
+      "Other": 0.7625,
+      "Pleura": 0.1644,
+      "Reproductive Organs": 0.0771
+     },
+     "first_line_regimens": [
+      {
+       "agents": [
+        "CYCLOPHOSPHAMIDE",
+        "DOXORUBICIN"
+       ],
+       "n": 1338
+      },
+      {
+       "agents": [
+        "LETROZOLE"
+       ],
+       "n": 365
+      },
+      {
+       "agents": [
+        "ANASTROZOLE"
+       ],
+       "n": 361
+      },
+      {
+       "agents": [
+        "TAMOXIFEN"
+       ],
+       "n": 330
+      },
+      {
+       "agents": [
+        "CYCLOPHOSPHAMIDE",
+        "FLUOROURACIL",
+        "METHOTREXATE"
+       ],
+       "n": 286
+      },
+      {
+       "agents": [],
+       "n": 158
+      },
+      {
+       "agents": [
+        "CAPECITABINE"
+       ],
+       "n": 116
+      },
+      {
+       "agents": [
+        "EXEMESTANE"
+       ],
+       "n": 87
+      }
+     ],
+     "deceased_rate": {
+      "0 sites": {
+       "n": 554,
+       "rate": 0.0632
+      },
+      "1-2 sites": {
+       "n": 1355,
+       "rate": 0.0753
+      },
+      "3+ sites": {
+       "n": 2343,
+       "rate": 0.5574
+      }
+     },
+     "os_months_quantiles": {
+      "DECEASED": [
+       2.0,
+       3.7,
+       5.1,
+       6.4,
+       8.1,
+       10.0,
+       11.8,
+       13.6,
+       15.0,
+       17.4,
+       19.6,
+       22.3,
+       24.9,
+       28.9,
+       32.9,
+       37.7,
+       42.3,
+       50.1,
+       64.2
+      ],
+      "LIVING": [
+       7.1,
+       12.4,
+       18.2,
+       23.2,
+       27.8,
+       34.3,
+       40.4,
+       45.6,
+       50.0,
+       54.1,
+       57.8,
+       60.9,
+       65.3,
+       68.9,
+       72.1,
+       74.3,
+       77.1,
+       80.1,
+       85.5
+      ]
+     }
+    },
+    "Stage 4": {
+     "n": 1090,
+     "site_count": {
+      "0": 0.0183,
+      "1": 0.0211,
+      "2": 0.0661,
+      "3": 0.1642,
+      "4": 0.2083,
+      "5": 0.1899,
+      "6": 0.1706,
+      "7": 0.0982,
+      "8": 0.0477,
+      "9": 0.0138,
+      "10": 0.0018
+     },
+     "site_rate": {
+      "Adrenal Glands": 0.0872,
+      "Bone": 0.8477,
+      "CNS/Brain": 0.4202,
+      "Intra Abdominal": 0.1908,
+      "Liver": 0.6138,
+      "Lung": 0.4789,
+      "Lymph Node": 0.8147,
+      "Other": 0.8982,
+      "Pleura": 0.1982,
+      "Reproductive Organs": 0.1138
+     },
+     "first_line_regimens": [
+      {
+       "agents": [
+        "LETROZOLE"
+       ],
+       "n": 180
+      },
+      {
+       "agents": [
+        "LETROZOLE",
+        "PALBOCICLIB"
+       ],
+       "n": 106
+      },
+      {
+       "agents": [
+        "PACLITAXEL",
+        "PERTUZUMAB",
+        "TRASTUZUMAB"
+       ],
+       "n": 104
+      },
+      {
+       "agents": [
+        "PACLITAXEL"
+       ],
+       "n": 87
+      },
+      {
+       "agents": [
+        "LEUPROLIDE"
+       ],
+       "n": 61
+      },
+      {
+       "agents": [
+        "TAMOXIFEN"
+       ],
+       "n": 43
+      },
+      {
+       "agents": [
+        "ANASTROZOLE"
+       ],
+       "n": 39
+      },
+      {
+       "agents": [
+        "CAPECITABINE"
+       ],
+       "n": 33
+      }
+     ],
+     "deceased_rate": {
+      "0 sites": {
+       "n": 20,
+       "rate": 0.45
+      },
+      "1-2 sites": {
+       "n": 95,
+       "rate": 0.1579
+      },
+      "3+ sites": {
+       "n": 975,
+       "rate": 0.521
+      }
+     },
+     "os_months_quantiles": {
+      "DECEASED": [
+       2.2,
+       4.6,
+       6.3,
+       9.0,
+       10.7,
+       12.5,
+       15.3,
+       17.8,
+       20.1,
+       22.7,
+       25.3,
+       28.3,
+       30.9,
+       34.1,
+       38.4,
+       42.1,
+       48.4,
+       54.2,
+       67.7
+      ],
+      "LIVING": [
+       4.8,
+       9.3,
+       12.7,
+       15.8,
+       20.8,
+       25.9,
+       29.7,
+       32.4,
+       36.7,
+       41.8,
+       46.7,
+       52.4,
+       57.8,
+       62.4,
+       68.3,
+       73.6,
+       81.6,
+       90.2,
+       98.8
+      ]
+     }
+    }
+   },
+   "frequency": 0.2149
+  },
+  "Colorectal Cancer": {
+   "n": 5502,
+   "sex": {
+    "Female": 0.4593,
+    "Male": 0.5407
+   },
+   "age": {
+    "mean": 60.4,
+    "sd": 13.7
+   },
+   "smoking": {
+    "Former/Current Smoker": 0.3693,
+    "Never": 0.5927,
+    "Unknown": 0.038
+   },
+   "stage": {
+    "Stage 1-3": 0.5714,
+    "Stage 4": 0.4286
+   },
+   "registry_entries": {
+    "1": 0.8399,
+    "2": 0.1281,
+    "3": 0.0225,
+    "4": 0.0095
+   },
+   "prior_medication": {
+    "No prior medications": 0.608,
+    "Prior medications to MSK": 0.1979,
+    "Unknown": 0.1941
+   },
+   "biomarkers": {
+    "PD-L1 history": {
+     "reported_rate": 0.016,
+     "values": {
+      "No": 0.7273,
+      "Yes": 0.2727
+     }
+    },
+    "HR": {
+     "reported_rate": 0.0,
+     "values": {}
+    },
+    "HER2": {
+     "reported_rate": 0.0,
+     "values": {}
+    },
+    "Gleason score, highest reported": {
+     "reported_rate": 0.0138,
+     "values": {
+      "6": 0.3947,
+      "7": 0.4605,
+      "8": 0.0658,
+      "9": 0.0789
+     }
+    }
+   },
+   "by_stage": {
+    "Stage 1-3": {
+     "n": 3144,
+     "site_count": {
+      "0": 0.0945,
+      "1": 0.1966,
+      "2": 0.2363,
+      "3": 0.1543,
+      "4": 0.1209,
+      "5": 0.0856,
+      "6": 0.0588,
+      "7": 0.0321,
+      "8": 0.0165,
+      "9": 0.0035,
+      "10": 0.001
+     },
+     "site_rate": {
+      "Adrenal Glands": 0.0477,
+      "Bone": 0.1673,
+      "CNS/Brain": 0.0738,
+      "Intra Abdominal": 0.2344,
+      "Liver": 0.3308,
+      "Lung": 0.3616,
+      "Lymph Node": 0.5547,
+      "Other": 0.7952,
+      "Pleura": 0.049,
+      "Reproductive Organs": 0.18
+     },
+     "first_line_regimens": [
+      {
+       "agents": [
+        "FLUOROURACIL",
+        "LEUCOVORIN",
+        "OXALIPLATIN"
+       ],
+       "n": 964
+      },
+      {
+       "agents": [],
+       "n": 734
+      },
+      {
+       "agents": [
+        "CAPECITABINE"
+       ],
+       "n": 685
+      },
+      {
+       "agents": [
+        "FLOXURIDINE"
+       ],
+       "n": 111
+      },
+      {
+       "agents": [
+        "FLUOROURACIL",
+        "IRINOTECAN",
+        "LEUCOVORIN"
+       ],
+       "n": 72
+      },
+      {
+       "agents": [
+        "FLUOROURACIL",
+        "LEUCOVORIN"
+       ],
+       "n": 69
+      },
+      {
+       "agents": [
+        "INVESTIGATIONAL"
+       ],
+       "n": 51
+      },
+      {
+       "agents": [
+        "OXALIPLATIN"
+       ],
+       "n": 47
+      }
+     ],
+     "deceased_rate": {
+      "0 sites": {
+       "n": 297,
+       "rate": 0.0404
+      },
+      "1-2 sites": {
+       "n": 1361,
+       "rate": 0.0757
+      },
+      "3+ sites": {
+       "n": 1486,
+       "rate": 0.4435
+      }
+     },
+     "os_months_quantiles": {
+      "DECEASED": [
+       2.2,
+       4.1,
+       5.7,
+       7.6,
+       9.0,
+       11.3,
+       13.2,
+       14.9,
+       16.9,
+       19.2,
+       21.1,
+       23.6,
+       26.6,
+       29.8,
+       33.9,
+       38.2,
+       43.1,
+       50.0,
+       58.7
+      ],
+      "LIVING": [
+       5.3,
+       9.0,
+       11.6,
+       14.3,
+       16.8,
+       19.3,
+       22.1,
+       24.5,
+       27.8,
+       30.8,
+       35.2,
+       40.3,
+       44.1,
+       47.6,
+       51.1,
+       55.4,
+       60.5,
+       67.2,
+       81.3
+      ]
+     }
+    },
+    "Stage 4": {
+     "n": 2358,
+     "site_count": {
+      "0": 0.0098,
+      "1": 0.0293,
+      "2": 0.0827,
+      "3": 0.1552,
+      "4": 0.2214,
+      "5": 0.2082,
+      "6": 0.1595,
+      "7": 0.0886,
+      "8": 0.0356,
+      "9": 0.0089,
+      "10": 0.0008
+     },
+     "site_rate": {
+      "Adrenal Glands": 0.1052,
+      "Bone": 0.2748,
+      "CNS/Brain": 0.1353,
+      "Intra Abdominal": 0.503,
+      "Liver": 0.8677,
+      "Lung": 0.6989,
+      "Lymph Node": 0.7595,
+      "Other": 0.8596,
+      "Pleura": 0.0865,
+      "Reproductive Organs": 0.2472
+     },
+     "first_line_regimens": [
+      {
+       "agents": [
+        "FLUOROURACIL",
+        "LEUCOVORIN",
+        "OXALIPLATIN"
+       ],
+       "n": 1182
+      },
+      {
+       "agents": [
+        "FLOXURIDINE"
+       ],
+       "n": 335
+      },
+      {
+       "agents": [
+        "CAPECITABINE"
+       ],
+       "n": 151
+      },
+      {
+       "agents": [],
+       "n": 112
+      },
+      {
+       "agents": [
+        "FLUOROURACIL",
+        "IRINOTECAN",
+        "LEUCOVORIN"
+       ],
+       "n": 102
+      },
+      {
+       "agents": [
+        "FLUOROURACIL",
+        "LEUCOVORIN"
+       ],
+       "n": 56
+      },
+      {
+       "agents": [
+        "BEVACIZUMAB",
+        "FLUOROURACIL",
+        "LEUCOVORIN",
+        "OXALIPLATIN"
+       ],
+       "n": 55
+      },
+      {
+       "agents": [
+        "FLUOROURACIL",
+        "IRINOTECAN",
+        "LEUCOVORIN",
+        "OXALIPLATIN"
+       ],
+       "n": 36
+      }
+     ],
+     "deceased_rate": {
+      "0 sites": {
+       "n": 23,
+       "rate": 0.2609
+      },
+      "1-2 sites": {
+       "n": 264,
+       "rate": 0.3409
+      },
+      "3+ sites": {
+       "n": 2071,
+       "rate": 0.6412
+      }
+     },
+     "os_months_quantiles": {
+      "DECEASED": [
+       2.3,
+       3.7,
+       5.1,
+       7.0,
+       8.5,
+       10.1,
+       11.7,
+       13.6,
+       15.2,
+       17.0,
+       18.9,
+       21.5,
+       24.1,
+       27.2,
+       29.7,
+       33.1,
+       37.5,
+       45.5,
+       57.3
+      ],
+      "LIVING": [
+       3.8,
+       8.2,
+       10.5,
+       13.1,
+       15.8,
+       18.8,
+       21.5,
+       24.6,
+       27.6,
+       31.2,
+       35.8,
+       42.0,
+       47.2,
+       52.7,
+       57.1,
+       62.5,
+       70.7,
+       81.4,
+       92.8
+      ]
+     }
+    }
+   },
+   "frequency": 0.2213
+  },
+  "Non-Small Cell Lung Cancer": {
+   "n": 7741,
+   "sex": {
+    "Female": 0.5847,
+    "Male": 0.4153
+   },
+   "age": {
+    "mean": 70.0,
+    "sd": 10.7
+   },
+   "smoking": {
+    "Former/Current Smoker": 0.6967,
+    "Never": 0.2595,
+    "Unknown": 0.0438
+   },
+   "stage": {
+    "Stage 1-3": 0.5616,
+    "Stage 4": 0.4384
+   },
+   "registry_entries": {
+    "1": 0.6758,
+    "2": 0.2175,
+    "3": 0.0729,
+    "4": 0.0338
+   },
+   "prior_medication": {
+    "No prior medications": 0.7011,
+    "Prior medications to MSK": 0.1509,
+    "Unknown": 0.148
+   },
+   "biomarkers": {
+    "PD-L1 history": {
+     "reported_rate": 0.7972,
+     "values": {
+      "No": 0.5192,
+      "Yes": 0.4808
+     }
+    },
+    "HR": {
+     "reported_rate": 0.0,
+     "values": {}
+    },
+    "HER2": {
+     "reported_rate": 0.0,
+     "values": {}
+    },
+    "Gleason score, highest reported": {
+     "reported_rate": 0.0211,
+     "values": {
+      "6": 0.2883,
+      "7": 0.5399,
+      "8": 0.0736,
+      "9": 0.0982
+     }
+    }
+   },
+   "by_stage": {
+    "Stage 1-3": {
+     "n": 4347,
+     "site_count": {
+      "0": 0.0732,
+      "1": 0.2061,
+      "2": 0.1783,
+      "3": 0.1624,
+      "4": 0.136,
+      "5": 0.1067,
+      "6": 0.0761,
+      "7": 0.0416,
+      "8": 0.015,
+      "9": 0.0041,
+      "10": 0.0005
+     },
+     "site_rate": {
+      "Adrenal Glands": 0.0909,
+      "Bone": 0.2919,
+      "CNS/Brain": 0.1971,
+      "Intra Abdominal": 0.0637,
+      "Liver": 0.185,
+      "Lung": 0.8877,
+      "Lymph Node": 0.5583,
+      "Other": 0.4946,
+      "Pleura": 0.2179,
+      "Reproductive Organs": 0.0501
+     },
+     "first_line_regimens": [
+      {
+       "agents": [],
+       "n": 1492
+      },
+      {
+       "agents": [
+        "CARBOPLATIN",
+        "PEMETREXED"
+       ],
+       "n": 463
+      },
+      {
+       "agents": [
+        "CISPLATIN",
+        "PEMETREXED"
+       ],
+       "n": 452
+      },
+      {
+       "agents": [
+        "CARBOPLATIN",
+        "PACLITAXEL"
+       ],
+       "n": 263
+      },
+      {
+       "agents": [
+        "INVESTIGATIONAL"
+       ],
+       "n": 159
+      },
+      {
+       "agents": [
+        "OSIMERTINIB"
+       ],
+       "n": 123
+      },
+      {
+       "agents": [
+        "GEMCITABINE"
+       ],
+       "n": 112
+      },
+      {
+       "agents": [
+        "CARBOPLATIN",
+        "PEMBROLIZUMAB",
+        "PEMETREXED"
+       ],
+       "n": 103
+      }
+     ],
+     "deceased_rate": {
+      "0 sites": {
+       "n": 318,
+       "rate": 0.1289
+      },
+      "1-2 sites": {
+       "n": 1671,
+       "rate": 0.1418
+      },
+      "3+ sites": {
+       "n": 2358,
+       "rate": 0.5407
+      }
+     },
+     "os_months_quantiles": {
+      "DECEASED": [
+       1.6,
+       2.8,
+       3.9,
+       5.6,
+       6.8,
+       8.2,
+       9.5,
+       11.3,
+       13.2,
+       15.7,
+       17.5,
+       20.7,
+       23.9,
+       27.4,
+       31.7,
+       37.3,
+       42.6,
+       51.0,
+       64.1
+      ],
+      "LIVING": [
+       6.7,
+       10.7,
+       14.0,
+       17.4,
+       20.2,
+       23.4,
+       26.5,
+       30.6,
+       35.0,
+       39.7,
+       44.3,
+       48.7,
+       52.8,
+       58.1,
+       62.6,
+       68.5,
+       73.9,
+       80.8,
+       88.8
+      ]
+     }
+    },
+    "Stage 4": {
+     "n": 3394,
+     "site_count": {
+      "0": 0.0141,
+      "1": 0.0153,
+      "2": 0.0463,
+      "3": 0.1019,
+      "4": 0.1656,
+      "5": 0.1945,
+      "6": 0.1989,
+      "7": 0.1621,
+      "8": 0.081,
+      "9": 0.0189,
+      "10": 0.0015
+     },
+     "site_rate": {
+      "Adrenal Glands": 0.2767,
+      "Bone": 0.7313,
+      "CNS/Brain": 0.561,
+      "Intra Abdominal": 0.1464,
+      "Liver": 0.4334,
+      "Lung": 0.9646,
+      "Lymph Node": 0.8671,
+      "Other": 0.7372,
+      "Pleura": 0.4246,
+      "Reproductive Organs": 0.0663
+     },
+     "first_line_regimens": [
+      {
+       "agents": [
+        "CARBOPLATIN",
+        "PEMBROLIZUMAB",
+        "PEMETREXED"
+       ],
+       "n": 382
+      },
+      {
+       "agents": [
+        "OSIMERTINIB"
+       ],
+       "n": 368
+      },
+      {
+       "agents": [
+        "CARBOPLATIN",
+        "PEMETREXED"
+       ],
+       "n": 293
+      },
+      {
+       "agents": [
+        "INVESTIGATIONAL"
+       ],
+       "n": 268
+      },
+      {
+       "agents": [
+        "PEMBROLIZUMAB"
+       ],
+       "n": 261
+      },
+      {
+       "agents": [],
+       "n": 222
+      },
+      {
+       "agents": [
+        "ERLOTINIB"
+       ],
+       "n": 184
+      },
+      {
+       "agents": [
+        "BEVACIZUMAB",
+        "CARBOPLATIN",
+        "PEMETREXED"
+       ],
+       "n": 162
+      }
+     ],
+     "deceased_rate": {
+      "0 sites": {
+       "n": 48,
+       "rate": 0.625
+      },
+      "1-2 sites": {
+       "n": 209,
+       "rate": 0.5455
+      },
+      "3+ sites": {
+       "n": 3137,
+       "rate": 0.7141
+      }
+     },
+     "os_months_quantiles": {
+      "DECEASED": [
+       0.9,
+       1.7,
+       2.5,
+       3.3,
+       4.4,
+       5.7,
+       6.9,
+       8.4,
+       9.9,
+       11.3,
+       12.9,
+       15.0,
+       17.3,
+       20.2,
+       23.7,
+       28.1,
+       33.7,
+       41.7,
+       54.1
+      ],
+      "LIVING": [
+       2.3,
+       7.2,
+       10.2,
+       12.2,
+       15.3,
+       17.4,
+       20.2,
+       23.3,
+       26.4,
+       30.1,
+       34.3,
+       41.4,
+       46.3,
+       50.8,
+       57.3,
+       64.0,
+       71.2,
+       80.4,
+       92.9
+      ]
+     }
+    }
+   },
+   "frequency": 0.3114
+  },
+  "Pancreatic Cancer": {
+   "n": 3084,
+   "sex": {
+    "Female": 0.4828,
+    "Male": 0.5172
+   },
+   "age": {
+    "mean": 67.5,
+    "sd": 11.1
+   },
+   "smoking": {
+    "Former/Current Smoker": 0.4099,
+    "Never": 0.5564,
+    "Unknown": 0.0337
+   },
+   "stage": {
+    "Stage 1-3": 0.5678,
+    "Stage 4": 0.4322
+   },
+   "registry_entries": {
+    "1": 0.799,
+    "2": 0.1644,
+    "3": 0.0289,
+    "4": 0.0078
+   },
+   "prior_medication": {
+    "No prior medications": 0.7237,
+    "Prior medications to MSK": 0.1702,
+    "Unknown": 0.106
+   },
+   "biomarkers": {
+    "PD-L1 history": {
+     "reported_rate": 0.0269,
+     "values": {
+      "No": 0.8554,
+      "Yes": 0.1446
+     }
+    },
+    "HR": {
+     "reported_rate": 0.0,
+     "values": {}
+    },
+    "HER2": {
+     "reported_rate": 0.0,
+     "values": {}
+    },
+    "Gleason score, highest reported": {
+     "reported_rate": 0.0224,
+     "values": {
+      "6": 0.2899,
+      "7": 0.5072,
+      "8": 0.1159,
+      "9": 0.087
+     }
+    }
+   },
+   "by_stage": {
+    "Stage 1-3": {
+     "n": 1751,
+     "site_count": {
+      "0": 0.0554,
+      "1": 0.1645,
+      "2": 0.1987,
+      "3": 0.217,
+      "4": 0.1696,
+      "5": 0.1114,
+      "6": 0.0537,
+      "7": 0.0217,
+      "8": 0.0069,
+      "9": 0.0011
+     },
+     "site_rate": {
+      "Adrenal Glands": 0.064,
+      "Bone": 0.1553,
+      "CNS/Brain": 0.0428,
+      "Intra Abdominal": 0.4369,
+      "Liver": 0.514,
+      "Lung": 0.3626,
+      "Lymph Node": 0.4021,
+      "Other": 0.8869,
+      "Pleura": 0.0548,
+      "Reproductive Organs": 0.068
+     },
+     "first_line_regimens": [
+      {
+       "agents": [
+        "FLUOROURACIL",
+        "IRINOTECAN",
+        "LEUCOVORIN",
+        "OXALIPLATIN"
+       ],
+       "n": 548
+      },
+      {
+       "agents": [],
+       "n": 270
+      },
+      {
+       "agents": [
+        "GEMCITABINE"
+       ],
+       "n": 214
+      },
+      {
+       "agents": [
+        "CAPECITABINE"
+       ],
+       "n": 165
+      },
+      {
+       "agents": [
+        "GEMCITABINE",
+        "PACLITAXEL PROTEIN-BOUND"
+       ],
+       "n": 110
+      },
+      {
+       "agents": [
+        "FLUOROURACIL",
+        "LEUCOVORIN",
+        "OXALIPLATIN"
+       ],
+       "n": 104
+      },
+      {
+       "agents": [
+        "INVESTIGATIONAL"
+       ],
+       "n": 54
+      },
+      {
+       "agents": [
+        "FLUOROURACIL",
+        "IRINOTECAN",
+        "OXALIPLATIN"
+       ],
+       "n": 21
+      }
+     ],
+     "deceased_rate": {
+      "0 sites": {
+       "n": 97,
+       "rate": 0.3093
+      },
+      "1-2 sites": {
+       "n": 636,
+       "rate": 0.4701
+      },
+      "3+ sites": {
+       "n": 1018,
+       "rate": 0.7024
+      }
+     },
+     "os_months_quantiles": {
+      "DECEASED": [
+       1.8,
+       3.3,
+       4.7,
+       6.1,
+       7.4,
+       8.5,
+       10.0,
+       11.6,
+       12.9,
+       14.5,
+       16.5,
+       18.2,
+       20.3,
+       22.3,
+       25.0,
+       28.7,
+       33.4,
+       41.3,
+       50.0
+      ],
+      "LIVING": [
+       2.8,
+       6.6,
+       8.4,
+       10.1,
+       11.7,
+       13.7,
+       16.1,
+       18.2,
+       20.9,
+       24.2,
+       27.7,
+       31.5,
+       36.1,
+       41.2,
+       46.1,
+       54.3,
+       61.9,
+       73.0,
+       85.7
+      ]
+     }
+    },
+    "Stage 4": {
+     "n": 1333,
+     "site_count": {
+      "0": 0.0278,
+      "1": 0.0113,
+      "2": 0.15,
+      "3": 0.2521,
+      "4": 0.2296,
+      "5": 0.1658,
+      "6": 0.1058,
+      "7": 0.0405,
+      "8": 0.0128,
+      "9": 0.0038,
+      "10": 0.0008
+     },
+     "site_rate": {
+      "Adrenal Glands": 0.1088,
+      "Bone": 0.2468,
+      "CNS/Brain": 0.069,
+      "Intra Abdominal": 0.5109,
+      "Liver": 0.8552,
+      "Lung": 0.4381,
+      "Lymph Node": 0.5334,
+      "Other": 0.9512,
+      "Pleura": 0.0653,
+      "Reproductive Organs": 0.0975
+     },
+     "first_line_regimens": [
+      {
+       "agents": [
+        "FLUOROURACIL",
+        "IRINOTECAN",
+        "LEUCOVORIN",
+        "OXALIPLATIN"
+       ],
+       "n": 452
+      },
+      {
+       "agents": [
+        "GEMCITABINE",
+        "PACLITAXEL PROTEIN-BOUND"
+       ],
+       "n": 168
+      },
+      {
+       "agents": [
+        "FLUOROURACIL",
+        "LEUCOVORIN",
+        "OXALIPLATIN"
+       ],
+       "n": 129
+      },
+      {
+       "agents": [],
+       "n": 101
+      },
+      {
+       "agents": [
+        "GEMCITABINE",
+        "INVESTIGATIONAL",
+        "PACLITAXEL PROTEIN-BOUND"
+       ],
+       "n": 85
+      },
+      {
+       "agents": [
+        "INVESTIGATIONAL"
+       ],
+       "n": 67
+      },
+      {
+       "agents": [
+        "GEMCITABINE"
+       ],
+       "n": 66
+      },
+      {
+       "agents": [
+        "CAPECITABINE",
+        "TEMOZOLOMIDE"
+       ],
+       "n": 54
+      }
+     ],
+     "deceased_rate": {
+      "0 sites": {
+       "n": 37,
+       "rate": 0.7027
+      },
+      "1-2 sites": {
+       "n": 215,
+       "rate": 0.7256
+      },
+      "3+ sites": {
+       "n": 1081,
+       "rate": 0.8131
+      }
+     },
+     "os_months_quantiles": {
+      "DECEASED": [
+       0.8,
+       1.5,
+       2.3,
+       3.1,
+       3.8,
+       4.4,
+       5.7,
+       6.5,
+       7.4,
+       8.5,
+       9.5,
+       10.7,
+       12.2,
+       14.1,
+       16.0,
+       18.3,
+       21.3,
+       25.7,
+       35.4
+      ],
+      "LIVING": [
+       0.8,
+       2.3,
+       3.6,
+       6.3,
+       7.9,
+       9.6,
+       11.0,
+       13.1,
+       14.3,
+       16.3,
+       19.0,
+       21.5,
+       26.2,
+       31.8,
+       36.2,
+       44.6,
+       52.7,
+       67.8,
+       80.5
+      ]
+     }
+    }
+   },
+   "frequency": 0.1241
+  },
+  "Prostate Cancer": {
+   "n": 3188,
+   "sex": {
+    "Female": 0.0003,
+    "Male": 0.9997
+   },
+   "age": {
+    "mean": 70.7,
+    "sd": 8.9
+   },
+   "smoking": {
+    "Former/Current Smoker": 0.4018,
+    "Never": 0.5496,
+    "Unknown": 0.0486
+   },
+   "stage": {
+    "Stage 1-3": 0.511,
+    "Stage 4": 0.489
+   },
+   "registry_entries": {
+    "1": 0.8491,
+    "2": 0.1252,
+    "3": 0.0198,
+    "4": 0.006
+   },
+   "prior_medication": {
+    "No prior medications": 0.2949,
+    "Prior medications to MSK": 0.2246,
+    "Unknown": 0.4806
+   },
+   "biomarkers": {
+    "PD-L1 history": {
+     "reported_rate": 0.0113,
+     "values": {
+      "No": 0.5833,
+      "Yes": 0.4167
+     }
+    },
+    "HR": {
+     "reported_rate": 0.0,
+     "values": {}
+    },
+    "HER2": {
+     "reported_rate": 0.0,
+     "values": {}
+    },
+    "Gleason score, highest reported": {
+     "reported_rate": 0.9153,
+     "values": {
+      "10": 0.0045,
+      "6": 0.0151,
+      "7": 0.3331,
+      "8": 0.1998,
+      "9": 0.4476
+     }
+    }
+   },
+   "by_stage": {
+    "Stage 1-3": {
+     "n": 1629,
+     "site_count": {
+      "0": 0.0823,
+      "1": 0.1719,
+      "2": 0.2216,
+      "3": 0.1964,
+      "4": 0.1289,
+      "5": 0.0945,
+      "6": 0.0571,
+      "7": 0.0319,
+      "8": 0.0129,
+      "9": 0.0025
+     },
+     "site_rate": {
+      "Adrenal Glands": 0.043,
+      "Bone": 0.5064,
+      "CNS/Brain": 0.1707,
+      "Intra Abdominal": 0.0706,
+      "Liver": 0.1602,
+      "Lung": 0.3266,
+      "Lymph Node": 0.5021,
+      "Other": 0.6384,
+      "Pleura": 0.043,
+      "Reproductive Organs": 0.423
+     },
+     "first_line_regimens": [
+      {
+       "agents": [],
+       "n": 343
+      },
+      {
+       "agents": [
+        "DEGARELIX"
+       ],
+       "n": 306
+      },
+      {
+       "agents": [
+        "BICALUTAMIDE"
+       ],
+       "n": 269
+      },
+      {
+       "agents": [
+        "LEUPROLIDE"
+       ],
+       "n": 248
+      },
+      {
+       "agents": [
+        "ABIRATERONE"
+       ],
+       "n": 81
+      },
+      {
+       "agents": [
+        "INVESTIGATIONAL"
+       ],
+       "n": 76
+      },
+      {
+       "agents": [
+        "BICALUTAMIDE",
+        "LEUPROLIDE"
+       ],
+       "n": 41
+      },
+      {
+       "agents": [
+        "ABIRATERONE",
+        "DEGARELIX"
+       ],
+       "n": 37
+      }
+     ],
+     "deceased_rate": {
+      "0 sites": {
+       "n": 134,
+       "rate": 0.0448
+      },
+      "1-2 sites": {
+       "n": 641,
+       "rate": 0.1139
+      },
+      "3+ sites": {
+       "n": 854,
+       "rate": 0.4239
+      }
+     },
+     "os_months_quantiles": {
+      "DECEASED": [
+       1.9,
+       3.6,
+       5.5,
+       7.5,
+       9.8,
+       12.0,
+       13.5,
+       15.2,
+       17.6,
+       20.6,
+       23.4,
+       27.2,
+       30.2,
+       33.1,
+       37.1,
+       42.9,
+       49.4,
+       58.4,
+       73.9
+      ],
+      "LIVING": [
+       6.2,
+       10.2,
+       12.6,
+       16.4,
+       19.5,
+       21.9,
+       25.1,
+       28.6,
+       33.3,
+       39.1,
+       43.2,
+       46.5,
+       51.5,
+       56.1,
+       60.8,
+       67.1,
+       75.1,
+       81.5,
+       91.3
+      ]
+     }
+    },
+    "Stage 4": {
+     "n": 1559,
+     "site_count": {
+      "0": 0.0128,
+      "1": 0.0571,
+      "2": 0.111,
+      "3": 0.204,
+      "4": 0.2373,
+      "5": 0.1687,
+      "6": 0.0969,
+      "7": 0.0757,
+      "8": 0.025,
+      "9": 0.009,
+      "10": 0.0026
+     },
+     "site_rate": {
+      "Adrenal Glands": 0.0616,
+      "Bone": 0.7466,
+      "CNS/Brain": 0.2713,
+      "Intra Abdominal": 0.0866,
+      "Liver": 0.2309,
+      "Lung": 0.3746,
+      "Lymph Node": 0.7588,
+      "Other": 0.7838,
+      "Pleura": 0.0674,
+      "Reproductive Organs": 0.7197
+     },
+     "first_line_regimens": [
+      {
+       "agents": [
+        "DEGARELIX"
+       ],
+       "n": 502
+      },
+      {
+       "agents": [
+        "BICALUTAMIDE"
+       ],
+       "n": 300
+      },
+      {
+       "agents": [
+        "LEUPROLIDE"
+       ],
+       "n": 206
+      },
+      {
+       "agents": [
+        "ABIRATERONE"
+       ],
+       "n": 123
+      },
+      {
+       "agents": [
+        "ABIRATERONE",
+        "DEGARELIX"
+       ],
+       "n": 61
+      },
+      {
+       "agents": [],
+       "n": 55
+      },
+      {
+       "agents": [
+        "BICALUTAMIDE",
+        "LEUPROLIDE"
+       ],
+       "n": 55
+      },
+      {
+       "agents": [
+        "INVESTIGATIONAL"
+       ],
+       "n": 39
+      }
+     ],
+     "deceased_rate": {
+      "0 sites": {
+       "n": 20,
+       "rate": 0.0
+      },
+      "1-2 sites": {
+       "n": 262,
+       "rate": 0.1947
+      },
+      "3+ sites": {
+       "n": 1277,
+       "rate": 0.4213
+      }
+     },
+     "os_months_quantiles": {
+      "DECEASED": [
+       1.8,
+       3.6,
+       4.8,
+       6.9,
+       8.4,
+       10.7,
+       12.5,
+       15.0,
+       17.1,
+       19.2,
+       21.1,
+       24.6,
+       29.6,
+       32.5,
+       36.7,
+       41.8,
+       48.2,
+       54.7,
+       66.1
+      ],
+      "LIVING": [
+       7.5,
+       10.9,
+       14.2,
+       16.9,
+       20.5,
+       23.2,
+       27.0,
+       30.5,
+       33.8,
+       39.2,
+       43.5,
+       47.5,
+       53.1,
+       57.6,
+       64.4,
+       70.4,
+       75.8,
+       84.6,
+       96.6
+      ]
+     }
+    }
+   },
+   "frequency": 0.1283
+  }
+ }
+}
