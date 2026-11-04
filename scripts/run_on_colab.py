@@ -33,7 +33,10 @@ POLL_SECONDS = 15
 
 def colab(*args: str, stdin: str | None = None, check: bool = True) -> subprocess.CompletedProcess[str]:
     """Call the Colab CLI. Its status chatter goes to stderr, program output to stdout."""
-    return subprocess.run(["colab", *args], input=stdin, text=True, capture_output=True, check=check)
+    result = subprocess.run(["colab", *args], input=stdin, text=True, capture_output=True, check=False)
+    if check and result.returncode != 0:
+        sys.exit(f"colab {' '.join(args[:2])} failed ({result.returncode}):\n{result.stderr or result.stdout}")
+    return result
 
 
 def run_remote_python(session: str, code: str, timeout: int = 60) -> str:
