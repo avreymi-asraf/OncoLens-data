@@ -37,8 +37,12 @@ def colab(*args: str, stdin: str | None = None, check: bool = True) -> subproces
 
 
 def run_remote_python(session: str, code: str, timeout: int = 60) -> str:
-    """Execute a snippet on the session's kernel and return what it printed."""
-    return colab("exec", "-s", session, "--timeout", str(timeout), stdin=code).stdout
+    """Execute a snippet on the session's kernel and return what it printed.
+
+    The CLI mixes its own `[colab] ...` notices (e.g. "new version available") into stdout; drop them.
+    """
+    stdout = colab("exec", "-s", session, "--timeout", str(timeout), stdin=code).stdout
+    return "\n".join(line for line in stdout.splitlines() if not line.startswith("[colab]"))
 
 
 def ship(session: str, paths: list[str]) -> None:
