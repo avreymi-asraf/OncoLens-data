@@ -1,11 +1,12 @@
 # Wiki-LLM Master Content Catalog (`index.md`)
 
 > **Navigation Rule:** Update this catalog on every wiki write. Read it first, then drill into pages.
+> **Repo goal:** find or generate, and make accessible, the information the OncoLens research needs — a small language model extracting RECIST response and overall stage from oncology records ([[purpose]]).
 > **Data rule:** no patient data anywhere in this wiki — see [[purpose]] §3.
 
 ## Core Steering & Maps
-* [[purpose]] — OncoLens mission, TBD prediction target, data-handling and evaluation rules (`Updated: 2026-10-31`)
-* [[gap_map]] — Open gaps G1–G7 (target undefined, EMR schema, external validation, synthetic, Hebrew NLP, governance, outcome completeness) (`Updated: 2026-10-31`)
+* [[purpose]] — Mission (extraction SLM), target variables (RECIST, stage, third TBD), data-handling and evaluation rules (`Updated: 2026-11-14`)
+* [[gap_map]] — Open gaps G1–G7 (third variable/cohort/metrics, EMR schema, external validation, synthetic, Hebrew NLP, governance, outcome completeness) (`Updated: 2026-11-14`)
 * [[log]] — Append-only audit trail (`Updated: 2026-10-31`)
 
 ## Target Systems (`systems/`)

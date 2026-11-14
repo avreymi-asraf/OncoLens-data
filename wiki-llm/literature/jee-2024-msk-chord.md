@@ -4,7 +4,7 @@ node_id: lit:jee-2024-msk-chord
 title: "Automated real-world data integration improves cancer outcome prediction (MSK-CHORD)"
 year: 2024
 tags: ["oncology", "real-world-data", "nlp", "survival", "clinicogenomics"]
-updated: 2026-10-31
+updated: 2026-11-14
 ---
 # Jee et al., Nature 636:728–736 (2024) — MSK-CHORD
 
@@ -20,7 +20,7 @@ Adding NLP-derived features (sites of disease, progression, receptor status) to 
 
 ## Reusable Ingredients for Our Lab
 * **Mechanism:** time zero + left truncation; NLP-derived disease sites as features; RSF baseline; external validation design.
-* **Target match:** `G1` (target definition — OS is the proven target), `G3` (external validation), `G5` (Hebrew NLP for sites/progression).
+* **Target match:** `G1` (note-derived progression labels), `G3` (external validation), `G5` (Hebrew NLP for sites/progression).
 
 ## Limitations & Failure Modes
 Sequencing-based cohort entry (selection bias); no comorbidities/symptoms; single catchment.

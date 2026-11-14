@@ -4,9 +4,11 @@ topic: data-source-landscape
 status: active
 confidence: initial
 supporting_experiments: []
-updated: 2026-10-31
+updated: 2026-11-14
 ---
 # Finding: Data-source landscape for OncoLens
+
+> **Note (2026-11-14):** this survey was run before the target was set. The research now targets *extraction* of RECIST response and overall stage from oncology text ([[purpose]] §2); the outcome columns below (OS, toxicity, …) reflect the earlier prediction framing. Re-read sources for text + RECIST/stage labels.
 
 > Raw: `wiki-llm/datasets/*.md` (23 pages), `wiki-llm/literature/*.md`. Research run 2026-10-31, English + Hebrew searches, ~45 queries, primary documents read where marked on each page.
 
@@ -62,7 +64,7 @@ Legend: ● strong, ◐ partial, ○ none. Access: O open, C credentialed/DUA, A
 - C/D-grade (promotional or social): Oncology DataMart numbers, Hadassah "Integrative Medical Intelligence", MDClone client lists, Flatiron sizes. Treat as leads, not facts.
 
 ## 5. Recommended next steps (for discussion with supervisors)
-1. Fix `G1` (target, cohort, time zero) — the matrix in §2 shows OS and progression have the most external support.
+1. Close `G1` (third variable, cohort, metrics); find sources with oncology text and RECIST/stage labels.
 2. Start method development on **MSK-CHORD** now (no approvals needed); reproduce its RSF baseline as the reference.
 3. Ask Hadassah IT the `G2` questions in [[systems/hadassah-emr]].
 4. Apply for **GENIE BPC** (Synapse) as the international external validation set.

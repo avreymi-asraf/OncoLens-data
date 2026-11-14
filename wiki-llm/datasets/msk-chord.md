@@ -16,7 +16,7 @@ supports_targets: [overall-survival, progression, metastasis, treatment-response
 resemblance_to_hadassah: medium-high (tertiary cancer center, notes-derived features, panel genomics)
 credibility: A (Nature 2024, full text read)
 primary_doc_read: "yes — Jee et al., Nature 2024 (PMC11655358)"
-updated: 2026-10-31
+updated: 2026-11-14
 ---
 # MSK-CHORD
 
@@ -26,7 +26,7 @@ Jee et al., *Nature* 636:728 (2024). Structured medications, demographics, tumou
 Survival models: random survival forests; c-index from 0.58 (stage IV pancreatic) to 0.83 (stage I–III breast). Multimodal > stage-only in every cancer type. External validation on the non-MSK part of GENIE BPC. Details: [[literature/jee-2024-msk-chord]].
 
 ## Why it matters for OncoLens
-- **The closest public analogue of the OncoLens task**: survival / progression prediction from real-world oncology EMR plus genomics plus note-derived features. It is the natural **method-development** and **benchmark** dataset before Hadassah access, and a published baseline to compare against.
+- **Closest public analogue of the earlier (prediction) framing**: survival / progression prediction from real-world oncology EMR plus genomics plus note-derived features; its NLP-derived progression labels remain relevant to RECIST-style extraction. It is the natural **method-development** and **benchmark** dataset before Hadassah access, and a published baseline to compare against.
 - Same building blocks as the Hadassah DataMart (EMR + genomic panel).
 
 ## Caveats

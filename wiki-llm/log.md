@@ -4,3 +4,4 @@
 > Query recent history with: `grep "^## \[" wiki-llm/log.md | tail -n 10`
 
 ## [2026-10-31 22:35] init+ingest | wiki-llm — Initialized wiki-llm/ in OncoLens-data (OncoLens-expriments layout + datasets/). Ingested data-source survey (EN+HE iterative research): 23 dataset pages, 9 literature notes, 2 findings (data-source-landscape, synthetic-data-strategy), gaps G1–G7
+## [2026-11-14 18:50] update | purpose, gap_map, index, findings, AGENT.md — Recorded research focus: small LM extracting RECIST 1.1 response and overall stage (third variable TBD) from oncology records; stated repo goal (find/generate and make accessible research data); narrowed G1; flagged survey as predating target

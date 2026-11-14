@@ -4,9 +4,11 @@ topic: synthetic-data-strategy
 status: active
 confidence: initial
 supporting_experiments: []
-updated: 2026-10-31
+updated: 2026-11-14
 ---
 # Finding: Synthetic data strategy for OncoLens
+
+> **Note (2026-11-14):** this survey was run before the target was set. The research now targets *extraction* of RECIST response and overall stage from oncology text ([[purpose]] §2); the outcome columns below (OS, toxicity, …) reflect the earlier prediction framing. Re-read sources for text + RECIST/stage labels.
 
 > Raw: [[datasets/synthea]], [[datasets/synthetic-ehr-generators]], [[datasets/synthetic-clinical-notes]], [[datasets/mdclone-israel]], [[literature/synthetic-ehr-privacy-audits]], [[literature/damico-2023-synthetic-hematology]]
 
@@ -24,7 +26,7 @@ It generates guideline-concordant care and does not model care deviations (Chen 
 
 ## Validation protocol (proposed, to agree with supervisors)
 1. **Fidelity:** marginals, pairwise correlations, code co-occurrence, Kaplan–Meier curves by stage (D'Amico SAFE-style "clinical fitness").
-2. **Utility:** train-on-synthetic / test-on-real (TSTR) vs train-on-real for the chosen `G1` target; report the gap.
+2. **Utility:** train-on-synthetic / test-on-real (TSTR) vs train-on-real for RECIST/stage extraction; report the gap.
 3. **Privacy:** per-record membership-inference and attribute-inference audits, distance-to-closest-record / NNDR, against a held-out real set (not only aggregate scores).
 4. **Text:** for Hebrew notes, check that no real spans are copied (n-gram overlap with source) before release.
 
@@ -34,4 +36,4 @@ It generates guideline-concordant care and does not model care deviations (Chen 
 - MSK-CHORD is CC BY-NC-ND — do not publish synthetic derivatives of it.
 
 ## Open Hypotheses
-- `G4`: does a survival model trained on an in-hospital synthetic twin keep its c-index on real Hadassah data? (No prior oncology study tests prediction on MDClone-type derivatives.)
+- `G4`: does an extraction model trained on in-hospital synthetic notes keep its accuracy on real Hadassah records? (No prior oncology study tests prediction on MDClone-type derivatives.)

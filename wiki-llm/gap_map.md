@@ -4,11 +4,11 @@
 
 ## Open Gaps
 
-### `G1` — Prediction target, cohort and evaluation are undefined
+### `G1` — Third target variable, cohort and evaluation are undefined
 * **System:** [[systems/hadassah-emr]]
-* **Status:** `OPEN` (Priority: Critical — blocks everything)
-* **Observation:** AGENT.md: target, cohort inclusion, time zero, horizon and metrics are not recorded. [[purpose]] has a TBD block.
-* **Candidate Directions:** Overall survival and progression have the strongest external support (MSK-CHORD, GENIE BPC, SEER). Decide whether cohort entry requires a genomic test (selection bias). See [[findings/data-source-landscape]] §2.
+* **Status:** `OPEN` — narrowed 2026-11-14 (Priority: Critical)
+* **Observation:** Targets set in [[purpose]] §2: RECIST 1.1 response (CR/PR/SD/PD) and overall stage (0–IV + sub-stages). Still undefined: the third variable, cohort inclusion, evaluation metrics.
+* **Candidate Directions:** Identify sources of oncology text with RECIST/stage labels (or labelable). Decide whether cohort entry requires a genomic test (selection bias). The data survey predates the target choice — see [[findings/data-source-landscape]].
 
 ### `G2` — Hadassah EMR structure and data model unknown
 * **Status:** `OPEN` (Priority: High)
