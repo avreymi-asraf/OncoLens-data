@@ -45,6 +45,9 @@ This repository is the **data and knowledge side** of OncoLens. Its layout:
 | `AGENT.md` | This file: project context for agents |
 | `wiki-llm/` | Knowledge base: `purpose.md`, `gap_map.md`, `index.md`, `datasets/` (one page per source), `literature/`, `findings/`, `systems/` |
 | `skills-lock.json` | Installed agent skills |
+| `oncolens/` | Data-access code: streaming loaders that make external datasets usable without copying them (e.g. `oncolens/mmai.py`) |
+| `tests/` | Offline tests (`uv run pytest`); live Hub checks are marked `network` (`uv run pytest -m network`) |
+| `pyproject.toml` | `uv` project for `oncolens` |
 
 The experiment loop (`JOURNAL.md`, `experiments/`, `scripts/lab.py`, Python environment) lives in the sibling repo `OncoLens-lab`.
 

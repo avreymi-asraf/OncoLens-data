@@ -1,0 +1,800 @@
+{
+  "meta": {
+    "title": "OncoLens Streaming Architecture (oncolens.mmai)",
+    "description": "How the oncolens Python package streams the DFCI MatchMiner-AI synthetic oncology corpus from Hugging Face one patient at a time: HTTP range reads of parquet columns (nothing stored on disk), forward-only grouping by pseudo_mrn, optional side tables for trial labels and dates, derived y labels, quality flags, and a leakage-free model_input. Scope: oncolens/ and its tests only.",
+    "generated_at": "2026-11-14T21:30:51+02:00",
+    "repo_root": "oncolens/"
+  },
+  "nodes": [
+    {
+      "id": "cli",
+      "label": "CLI: python -m oncolens.mmai",
+      "type": "client",
+      "group": "Entry Points",
+      "description": "main() (L446-488): argparse flags --split/--limit/--sample/--dates/--summary/--no-y/--model-input/--revision/-o. Rejects bad args via parser.error before any download, writes one JSON object per line (JSONL) to stdout or a file, closes the generator in finally (releases the HTTP handle), tolerates BrokenPipe when piped into head.",
+      "files": [
+        "oncolens/mmai.py:446-488"
+      ],
+      "tech": [
+        "argparse",
+        "json"
+      ]
+    },
+    {
+      "id": "py-caller",
+      "label": "Python caller / notebook",
+      "type": "client",
+      "group": "Entry Points",
+      "description": "Code that does `for patient in mmai.iter_patients(...)` and hands mmai.model_input(patient) to a model while keeping patient['y'] as the answer key (usage shown in the module docstring, L43-48).",
+      "files": [
+        "oncolens/mmai.py:43-48"
+      ],
+      "tech": []
+    },
+    {
+      "id": "tests",
+      "label": "tests/test_mmai.py",
+      "type": "other",
+      "group": "Entry Points",
+      "description": "Network-free pytest suite (fake rows, monkeypatched iter_rows) covering grouping, stage parsing, build_patient shape, model_input leakage, flags, CLI JSONL, argument validation; one @network test streams the first patients from the Hub (run with -m network).",
+      "files": [
+        "tests/test_mmai.py"
+      ],
+      "tech": [
+        "pytest"
+      ]
+    },
+    {
+      "id": "iter-patients",
+      "label": "iter_patients()",
+      "type": "api",
+      "group": "Public API (oncolens.mmai)",
+      "description": "Public entry point (L384-413). Checks arguments eagerly (so errors surface before any download), rejects with_summary without with_y, then returns the _iter_patients generator. Args: split, limit, sample, with_y, with_dates, with_summary, revision (pinned commit), batch_size.",
+      "files": [
+        "oncolens/mmai.py:384-413"
+      ],
+      "tech": []
+    },
+    {
+      "id": "check-selection",
+      "label": "_check_selection()",
+      "type": "function",
+      "group": "Public API (oncolens.mmai)",
+      "description": "Validates split in (train,val,test), limit >= 0 and sample in (0,1]. Called by iter_patients and again by patients_from_rows.",
+      "files": [
+        "oncolens/mmai.py:337-343"
+      ],
+      "tech": []
+    },
+    {
+      "id": "iter-patients-impl",
+      "label": "_iter_patients() orchestrator",
+      "type": "function",
+      "group": "Public API (oncolens.mmai)",
+      "description": "Generator (L416-443) that wires the stream together: picks the note columns (adds masked_text + note_is_from_positive_prompt when with_y), loads the small trial-label table if with_y, loads document dates if with_dates, opens the notes row stream, and `yield from` patients_from_rows. Returns immediately when limit == 0.",
+      "files": [
+        "oncolens/mmai.py:416-443"
+      ],
+      "tech": []
+    },
+    {
+      "id": "model-input",
+      "label": "model_input()",
+      "type": "function",
+      "group": "Public API (oncolens.mmai)",
+      "description": "Builds the object to hand a model (L323-334): opaque patient_id plus documents reduced to seq/type/date/text, dropping flagged documents (refusals/placeholders) unless include_flagged. No split, source, MRN or y. seq keeps original positions so a gap shows a dropped note.",
+      "files": [
+        "oncolens/mmai.py:323-334"
+      ],
+      "tech": []
+    },
+    {
+      "id": "iter-rows",
+      "label": "iter_rows()",
+      "type": "function",
+      "group": "Hub Transport",
+      "description": "Streams one parquet file as dict rows (L90-105): opens datasets/<repo>@<revision>/<file> through HfFileSystem (32 MB blocks, cache_type='none'), pq.ParquetFile(buffer_size=32 MB, pre_buffer=False), iter_batches(batch_size, columns=...) and yields batch.to_pylist(). Only requested columns are fetched, so memory stays bounded (~0.5 GB RSS) even for a single huge row group.",
+      "files": [
+        "oncolens/mmai.py:90-105"
+      ],
+      "tech": [
+        "pyarrow",
+        "huggingface_hub"
+      ]
+    },
+    {
+      "id": "load-trial-labels",
+      "label": "load_trial_labels()",
+      "type": "function",
+      "group": "Hub Transport",
+      "description": "Reads the small eligibility table (pseudo_mrn, nct_id, title, this_space, eligibility_result; + patient_summary when with_summary, ~80 MB) into a dict keyed by pseudo_mrn. ~5-15 s without the summary.",
+      "files": [
+        "oncolens/mmai.py:108-116"
+      ],
+      "tech": []
+    },
+    {
+      "id": "load-dates",
+      "label": "load_document_dates()",
+      "type": "function",
+      "group": "Hub Transport",
+      "description": "Streams ~1 GB of patient_long_text from the summaries file (~3-4 min) and keeps only the '<date> <doc_type>' headers per patient via parse_document_dates (regex over DOC_TYPES). Dates exist nowhere else in the dataset.",
+      "files": [
+        "oncolens/mmai.py:119-135"
+      ],
+      "tech": []
+    },
+    {
+      "id": "hf-fs",
+      "label": "HfFileSystem + pyarrow",
+      "type": "infra",
+      "group": "Hub Transport",
+      "description": "fsspec file object over the Hub. pyarrow reads the parquet footer, then fetches only the needed column chunks with HTTP range requests; nothing is written to disk. The notes file has a single 7 GB row group and no page index, so reading is forward-only (no random access).",
+      "files": [
+        "oncolens/mmai.py:98-105"
+      ],
+      "tech": [
+        "fsspec",
+        "HTTP range reads"
+      ]
+    },
+    {
+      "id": "hf-notes",
+      "label": "all_synthetic_notes.parquet",
+      "type": "storage",
+      "group": "Remote Data (Hugging Face)",
+      "description": "846,577 synthetic notes for 63,865 patients (columns used: pseudo_mrn, event_type, synthetic_note, split, event_text, masked_text, note_is_from_positive_prompt). Sorted by pseudo_mrn, so each patient's notes are contiguous. 7 GB single row group.",
+      "files": [
+        "oncolens/mmai.py:70,73-74"
+      ],
+      "tech": [
+        "parquet"
+      ]
+    },
+    {
+      "id": "hf-elig",
+      "label": "space_specific_eligibility_checks.parquet",
+      "type": "storage",
+      "group": "Remote Data (Hugging Face)",
+      "description": "Small per-patient table: clinical-trial space, NCT id, title, LLM eligibility judgement, optional patient_summary.",
+      "files": [
+        "oncolens/mmai.py:72"
+      ],
+      "tech": [
+        "parquet"
+      ]
+    },
+    {
+      "id": "hf-summ",
+      "label": "patient_summaries_and_their_spaces.parquet",
+      "type": "storage",
+      "group": "Remote Data (Hugging Face)",
+      "description": "Holds patient_long_text: the dated, chunk-filtered concatenation of a patient's notes; the only source of synthetic YYYY-MM-DD dates.",
+      "files": [
+        "oncolens/mmai.py:71"
+      ],
+      "tech": [
+        "parquet"
+      ]
+    },
+    {
+      "id": "patients-from-rows",
+      "label": "patients_from_rows()",
+      "type": "function",
+      "group": "Stream Core (pure, no network)",
+      "description": "Network-free core (L346-376): validates selection, groups the row stream by pseudo_mrn, skips patients outside the requested split or hash-sample, calls build_patient with that patient's trial label and dates, counts emitted patients and stops at limit.",
+      "files": [
+        "oncolens/mmai.py:346-376"
+      ],
+      "tech": []
+    },
+    {
+      "id": "group-consecutive",
+      "label": "group_consecutive()",
+      "type": "function",
+      "group": "Stream Core (pure, no network)",
+      "description": "itertools.groupby wrapper that yields (key, list) per patient and raises ValueError if a key returns after its group ended, i.e. the input was not sorted. This is what turns an ordered row stream into per-patient groups with only one patient held in memory.",
+      "files": [
+        "oncolens/mmai.py:143-150"
+      ],
+      "tech": []
+    },
+    {
+      "id": "sampling",
+      "label": "Sampling & opaque IDs",
+      "type": "function",
+      "group": "Stream Core (pure, no network)",
+      "description": "sample_bucket(mrn): deterministic [0,1) from sha256(repo:mrn) so sample=0.01 gives the same spread-out subset every time. opaque_patient_id(mrn): 'mmai-' + 12 hex chars, because raw pseudo_mrn < 1e6 is exactly the designed-eligible group and would leak the design label.",
+      "files": [
+        "oncolens/mmai.py:153-164"
+      ],
+      "tech": [
+        "hashlib"
+      ]
+    },
+    {
+      "id": "build-patient",
+      "label": "build_patient()",
+      "type": "function",
+      "group": "Stream Core (pure, no network)",
+      "description": "Assembles one patient object (L258-320) from that patient's note rows: checks one split, attaches dates only when the (date,type) headers line up 1:1 with note types (else None, ~4.5% of patients), builds documents[{seq,type,date,text,flag}], and when with_y builds y (event_history, diagnoses, document_events, trial, patient_summary).",
+      "files": [
+        "oncolens/mmai.py:258-320"
+      ],
+      "tech": []
+    },
+    {
+      "id": "strip-markers",
+      "label": "strip_event_markers()",
+      "type": "function",
+      "group": "Labels & Quality",
+      "description": "Turns masked_text (timeline with one event wrapped in <BEGIN/END EVENT ...> markers) into the plain timeline used as y.event_history.",
+      "files": [
+        "oncolens/mmai.py:167-185"
+      ],
+      "tech": [
+        "re"
+      ]
+    },
+    {
+      "id": "diagnoses",
+      "label": "parse_diagnoses() + parse_stage()",
+      "type": "function",
+      "group": "Labels & Quality",
+      "description": "Finds timeline lines that state a cancer diagnosis (is_diagnosis_line: 'diagnos*' word with stage/ICD-O/TNM evidence, or ICD-O site+morphology) and regex-parses overall stage (Arabic -> Roman, sub-stage, refinement 'III (IIIb)') plus age_of(). A convenience parse, not a gold label.",
+      "files": [
+        "oncolens/mmai.py:170-237"
+      ],
+      "tech": [
+        "re"
+      ]
+    },
+    {
+      "id": "document-flag",
+      "label": "document_flag()",
+      "type": "function",
+      "group": "Labels & Quality",
+      "description": "Marks a generated note unusable: 'refusal' (empty or 'I'm sorry...' under 600 chars) or 'placeholder_event' (note generated from a bracketed or chatter event). Whole corpus at the pinned revision: 1 refusal, 2 placeholders. Flag is stored on the document; model_input drops flagged ones.",
+      "files": [
+        "oncolens/mmai.py:179-180,240-255"
+      ],
+      "tech": [
+        "re"
+      ]
+    },
+    {
+      "id": "slm-consumer",
+      "label": "SLM / experiments (OncoLens-lab)",
+      "type": "external",
+      "group": "Consumers",
+      "description": "Downstream consumer of the JSON: prompts built from model_input; y.diagnoses / document_events used as answer sources for RECIST/stage extraction experiments. Lives in the sibling OncoLens-lab repo (not part of oncolens/).",
+      "files": [
+        "wiki-llm/datasets/mmai-synthetic.md"
+      ],
+      "tech": []
+    }
+  ],
+  "edges": [
+    {
+      "source": "cli",
+      "target": "iter-patients",
+      "label": "calls",
+      "description": "main() builds the stream from parsed flags"
+    },
+    {
+      "source": "cli",
+      "target": "model-input",
+      "label": "calls",
+      "description": "with --model-input writes model_input(patient) instead of the full object"
+    },
+    {
+      "source": "cli",
+      "target": "slm-consumer",
+      "label": "feeds",
+      "description": "JSONL file/stdout consumed by experiments"
+    },
+    {
+      "source": "py-caller",
+      "target": "iter-patients",
+      "label": "calls",
+      "description": "iterates the generator"
+    },
+    {
+      "source": "py-caller",
+      "target": "model-input",
+      "label": "calls",
+      "description": "prompt JSON without answers"
+    },
+    {
+      "source": "model-input",
+      "target": "slm-consumer",
+      "label": "feeds",
+      "description": "clean prompt JSON, no y"
+    },
+    {
+      "source": "tests",
+      "target": "patients-from-rows",
+      "label": "tests",
+      "description": "fake row streams"
+    },
+    {
+      "source": "tests",
+      "target": "build-patient",
+      "label": "tests",
+      "description": "shape, dates, y"
+    },
+    {
+      "source": "tests",
+      "target": "iter-patients",
+      "label": "tests",
+      "description": "argument validation before any download; one network smoke test"
+    },
+    {
+      "source": "tests",
+      "target": "cli",
+      "label": "tests",
+      "description": "main() writes JSONL"
+    },
+    {
+      "source": "iter-patients",
+      "target": "check-selection",
+      "label": "calls",
+      "description": "eager argument check"
+    },
+    {
+      "source": "iter-patients",
+      "target": "iter-patients-impl",
+      "label": "returns",
+      "description": "hands back the generator"
+    },
+    {
+      "source": "iter-patients-impl",
+      "target": "load-trial-labels",
+      "label": "calls",
+      "description": "only when with_y"
+    },
+    {
+      "source": "iter-patients-impl",
+      "target": "load-dates",
+      "label": "calls",
+      "description": "only when with_dates"
+    },
+    {
+      "source": "iter-patients-impl",
+      "target": "iter-rows",
+      "label": "calls",
+      "description": "opens the notes row stream"
+    },
+    {
+      "source": "iter-patients-impl",
+      "target": "patients-from-rows",
+      "label": "yield from",
+      "description": "passes rows + side tables"
+    },
+    {
+      "source": "load-trial-labels",
+      "target": "iter-rows",
+      "label": "calls",
+      "description": "reads the eligibility file"
+    },
+    {
+      "source": "load-dates",
+      "target": "iter-rows",
+      "label": "calls",
+      "description": "reads patient_long_text"
+    },
+    {
+      "source": "iter-rows",
+      "target": "hf-fs",
+      "label": "opens",
+      "description": "HfFileSystem.open + ParquetFile"
+    },
+    {
+      "source": "hf-fs",
+      "target": "hf-notes",
+      "label": "range-reads",
+      "description": "needed columns only"
+    },
+    {
+      "source": "hf-fs",
+      "target": "hf-elig",
+      "label": "range-reads",
+      "description": "needed columns only"
+    },
+    {
+      "source": "hf-fs",
+      "target": "hf-summ",
+      "label": "range-reads",
+      "description": "pseudo_mrn + patient_long_text"
+    },
+    {
+      "source": "patients-from-rows",
+      "target": "check-selection",
+      "label": "calls",
+      "description": "re-validates when called directly"
+    },
+    {
+      "source": "patients-from-rows",
+      "target": "group-consecutive",
+      "label": "calls",
+      "description": "one group per pseudo_mrn"
+    },
+    {
+      "source": "patients-from-rows",
+      "target": "sampling",
+      "label": "calls",
+      "description": "sample_bucket filter"
+    },
+    {
+      "source": "patients-from-rows",
+      "target": "build-patient",
+      "label": "calls",
+      "description": "per kept patient"
+    },
+    {
+      "source": "build-patient",
+      "target": "sampling",
+      "label": "calls",
+      "description": "opaque_patient_id"
+    },
+    {
+      "source": "build-patient",
+      "target": "strip-markers",
+      "label": "calls",
+      "description": "y.event_history"
+    },
+    {
+      "source": "build-patient",
+      "target": "diagnoses",
+      "label": "calls",
+      "description": "y.diagnoses"
+    },
+    {
+      "source": "build-patient",
+      "target": "document-flag",
+      "label": "calls",
+      "description": "flag per document"
+    }
+  ],
+  "flows": [
+    {
+      "id": "start-stream",
+      "name": "1. Start a stream (validate first)",
+      "description": "From the call to a ready generator; bad arguments fail before any network traffic.",
+      "steps": [
+        {
+          "order": 1,
+          "node": "py-caller",
+          "action": "Call",
+          "details": "iter_patients(split='test', sample=0.01, limit=20, with_dates=True)"
+        },
+        {
+          "order": 2,
+          "node": "iter-patients",
+          "action": "Eager checks",
+          "details": "Also rejects with_summary without with_y."
+        },
+        {
+          "order": 3,
+          "node": "check-selection",
+          "action": "Validate",
+          "details": "split in train/val/test, limit >= 0, 0 < sample <= 1; ValueError otherwise."
+        },
+        {
+          "order": 4,
+          "node": "iter-patients-impl",
+          "action": "Generator created",
+          "details": "Nothing is downloaded until the first next(): the work starts lazily."
+        }
+      ]
+    },
+    {
+      "id": "trial-labels",
+      "name": "2. Load trial labels (small side table)",
+      "description": "If with_y: one quick pass over the eligibility file builds pseudo_mrn -> trial label.",
+      "steps": [
+        {
+          "order": 1,
+          "node": "iter-patients-impl",
+          "action": "Needs labels",
+          "details": "with_y=True so trial info goes into y.trial."
+        },
+        {
+          "order": 2,
+          "node": "load-trial-labels",
+          "action": "Read columns",
+          "details": "pseudo_mrn, nct_id, title, this_space, eligibility_result (+patient_summary)."
+        },
+        {
+          "order": 3,
+          "node": "iter-rows",
+          "action": "Stream batches",
+          "details": "512-row pyarrow batches, requested columns only."
+        },
+        {
+          "order": 4,
+          "node": "hf-fs",
+          "action": "Range reads",
+          "details": "Footer first, then column chunks over HTTP."
+        },
+        {
+          "order": 5,
+          "node": "hf-elig",
+          "action": "Source",
+          "details": "Few MB (~80 MB with the summary); ~5-15 s."
+        }
+      ]
+    },
+    {
+      "id": "stream-notes",
+      "name": "3. Stream notes into patients (core path)",
+      "description": "The main pipeline: forward-only read of the 7 GB notes file, grouped into one patient at a time.",
+      "steps": [
+        {
+          "order": 1,
+          "node": "iter-patients-impl",
+          "action": "Open note stream",
+          "details": "Columns: pseudo_mrn, event_type, synthetic_note, split, event_text (+masked_text, positive flag for y)."
+        },
+        {
+          "order": 2,
+          "node": "iter-rows",
+          "action": "Batches to rows",
+          "details": "iter_batches -> to_pylist -> yield rows one by one."
+        },
+        {
+          "order": 3,
+          "node": "hf-fs",
+          "action": "Range reads",
+          "details": "32 MB blocks, no cache, no pre-buffer; no disk writes."
+        },
+        {
+          "order": 4,
+          "node": "hf-notes",
+          "action": "Rows arrive sorted",
+          "details": "Sorted by pseudo_mrn: each patient's notes contiguous; first patient after ~10-20 s, ~1,000 notes/s."
+        },
+        {
+          "order": 5,
+          "node": "patients-from-rows",
+          "action": "Consume rows",
+          "details": "Applies split/sample/limit filters while iterating."
+        },
+        {
+          "order": 6,
+          "node": "group-consecutive",
+          "action": "Group by pseudo_mrn",
+          "details": "Only the current patient's notes are held; raises if input is not grouped."
+        },
+        {
+          "order": 7,
+          "node": "sampling",
+          "action": "Hash decisions",
+          "details": "sample_bucket decides inclusion; opaque_patient_id names the patient."
+        },
+        {
+          "order": 8,
+          "node": "build-patient",
+          "action": "Assemble & yield",
+          "details": "documents + y; caller receives one JSON-serialisable dict per patient."
+        },
+        {
+          "order": 9,
+          "node": "py-caller",
+          "action": "Receives patient",
+          "details": "Memory stays ~0.5 GB regardless of how many patients are consumed."
+        }
+      ]
+    },
+    {
+      "id": "attach-dates",
+      "name": "4. Attach document dates (optional, ~3-4 min)",
+      "description": "with_dates streams patient_long_text first and keeps only the date/type headers.",
+      "steps": [
+        {
+          "order": 1,
+          "node": "iter-patients-impl",
+          "action": "with_dates=True",
+          "details": "Dates are loaded before the first patient is emitted."
+        },
+        {
+          "order": 2,
+          "node": "load-dates",
+          "action": "Parse headers",
+          "details": "parse_document_dates regex on '<YYYY-MM-DD> <doc_type>' lines."
+        },
+        {
+          "order": 3,
+          "node": "iter-rows",
+          "action": "Stream",
+          "details": "batch_size=256 for the large text column."
+        },
+        {
+          "order": 4,
+          "node": "hf-fs",
+          "action": "Range reads",
+          "details": "~1 GB of patient_long_text."
+        },
+        {
+          "order": 5,
+          "node": "hf-summ",
+          "action": "Source of dates",
+          "details": "Only place dates exist."
+        },
+        {
+          "order": 6,
+          "node": "patients-from-rows",
+          "action": "Pass dates by mrn",
+          "details": "document_dates.get(mrn) for each patient."
+        },
+        {
+          "order": 7,
+          "node": "build-patient",
+          "action": "Align or null",
+          "details": "Dates attached only if (date,type) headers match note types 1:1; else every date is None (~4.5%)."
+        }
+      ]
+    },
+    {
+      "id": "derive-y",
+      "name": "5. Derive y (answers) from the timeline",
+      "description": "y is parsed from generator-side columns, never from the note text the model sees.",
+      "steps": [
+        {
+          "order": 1,
+          "node": "build-patient",
+          "action": "with_y=True",
+          "details": "Takes masked_text of the first note, trial label and positive-prompt flags."
+        },
+        {
+          "order": 2,
+          "node": "strip-markers",
+          "action": "Plain timeline",
+          "details": "Removes <BEGIN/END EVENT> markers -> y.event_history."
+        },
+        {
+          "order": 3,
+          "node": "diagnoses",
+          "action": "Diagnoses + stage",
+          "details": "Diagnosis lines with parsed overall stage (Roman, sub-stage) -> y.diagnoses; document_events keeps each note's source event."
+        }
+      ]
+    },
+    {
+      "id": "quality-flags",
+      "name": "6. Flag unusable notes",
+      "description": "Refusals and placeholder-event notes are marked per document at assembly time.",
+      "steps": [
+        {
+          "order": 1,
+          "node": "build-patient",
+          "action": "Per document",
+          "details": "Calls document_flag(synthetic_note, event_text)."
+        },
+        {
+          "order": 2,
+          "node": "document-flag",
+          "action": "Classify",
+          "details": "refusal / placeholder_event / None. Corpus-wide: 1 refusal, 2 placeholders."
+        },
+        {
+          "order": 3,
+          "node": "model-input",
+          "action": "Drop flagged",
+          "details": "model_input omits flagged docs unless include_flagged; seq gaps remain visible."
+        }
+      ]
+    },
+    {
+      "id": "model-input-path",
+      "name": "7. Build the model prompt (no leakage)",
+      "description": "What a model sees vs. what stays in y.",
+      "steps": [
+        {
+          "order": 1,
+          "node": "py-caller",
+          "action": "Has patient",
+          "details": "Full patient dict incl. y, split, source."
+        },
+        {
+          "order": 2,
+          "node": "model-input",
+          "action": "Reduce",
+          "details": "patient_id + documents[seq,type,date,text]; no MRN, split, source, y."
+        },
+        {
+          "order": 3,
+          "node": "slm-consumer",
+          "action": "Model call",
+          "details": "Prompt JSON for the extraction model; y used only for scoring."
+        }
+      ]
+    },
+    {
+      "id": "cli-export",
+      "name": "8. CLI export to JSONL",
+      "description": "python -m oncolens.mmai ... -o file.jsonl",
+      "steps": [
+        {
+          "order": 1,
+          "node": "cli",
+          "action": "Parse flags",
+          "details": "parser.error on bad combos (--summary with --no-y, limit <= 0)."
+        },
+        {
+          "order": 2,
+          "node": "iter-patients",
+          "action": "Create stream",
+          "details": "Same API as Python callers; ValueError becomes a CLI error."
+        },
+        {
+          "order": 3,
+          "node": "iter-patients-impl",
+          "action": "Run stream",
+          "details": "Lazily reads from the Hub."
+        },
+        {
+          "order": 4,
+          "node": "patients-from-rows",
+          "action": "Filter + group",
+          "details": "split / sample / limit."
+        },
+        {
+          "order": 5,
+          "node": "build-patient",
+          "action": "Patient object",
+          "details": "With y unless --no-y / --model-input."
+        },
+        {
+          "order": 6,
+          "node": "model-input",
+          "action": "Optional reduce",
+          "details": "--model-input writes only the prompt-safe object."
+        },
+        {
+          "order": 7,
+          "node": "slm-consumer",
+          "action": "JSONL out",
+          "details": "One JSON object per line; closed in finally, BrokenPipe tolerated."
+        }
+      ]
+    },
+    {
+      "id": "subset-selection",
+      "name": "9. Choose a subset (split / sample / limit)",
+      "description": "Splits and samples are filters on a forward scan, not random access.",
+      "steps": [
+        {
+          "order": 1,
+          "node": "iter-patients",
+          "action": "Args",
+          "details": "split, sample, limit."
+        },
+        {
+          "order": 2,
+          "node": "check-selection",
+          "action": "Validate",
+          "details": "Range checks."
+        },
+        {
+          "order": 3,
+          "node": "patients-from-rows",
+          "action": "Filter loop",
+          "details": "Skips patients of other splits; stops after limit."
+        },
+        {
+          "order": 4,
+          "node": "group-consecutive",
+          "action": "Patient boundary",
+          "details": "Filtering happens per patient group."
+        },
+        {
+          "order": 5,
+          "node": "sampling",
+          "action": "Hash bucket",
+          "details": "sample=0.01 keeps ~1% spread over the file; limit alone gives a narrow all-eligible slice (file is grouped by trial space/design)."
+        }
+      ]
+    }
+  ]
+}

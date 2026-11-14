@@ -44,6 +44,7 @@
 * [[datasets/synthetic-ehr-generators]] — HALO, CEHR-GPT, TabDDPM, CTGAN, MDClone compared
 * [[datasets/synthetic-clinical-notes]] — Asclepius, longitudinal LLM notes, de-id-vs-synthetic
 * [[datasets/cancerguide-synthetic]] — GPT-4.1 synthetic NSCLC notes with treatment labels
+* [[datasets/mmai-synthetic]] — DFCI MatchMiner-AI: 63,865 synthetic patients × ~13 dated notes (clinical/imaging/path/NGS) + generator timelines; streamed by `oncolens.mmai` (`Updated: 2026-11-14`)
 
 ## Literature (`literature/`) — template in `literature/_TEMPLATE.md`
 * [[literature/jee-2024-msk-chord]] — MSK-CHORD, Nature 2024 (full text read)

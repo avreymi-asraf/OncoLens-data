@@ -1,0 +1,38 @@
+[project]
+name = "oncolens"
+version = "0.1.0"
+description = "OncoLens data access: streaming loaders for research datasets (no patient data stored in the repo)."
+readme = "AGENT.md"
+requires-python = ">=3.11"
+dependencies = [
+    "huggingface_hub>=0.25",
+    "pyarrow>=17",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8",
+    "ruff>=0.6",
+    "pyright>=1.1.380",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["oncolens"]
+
+[tool.ruff]
+line-length = 120
+extend-exclude = [".agents", ".claude", "wiki-llm", ".remember"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP"]
+
+[tool.pyright]
+include = ["oncolens", "tests"]
+
+[tool.pytest.ini_options]
+addopts = "-q -m 'not network'"
+markers = ["network: streams from the Hugging Face Hub (run with: uv run pytest -m network)"]
