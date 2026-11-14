@@ -1,7 +1,7 @@
 # Wiki-LLM Master Content Catalog (`index.md`)
 
 > **Navigation Rule:** Update this catalog on every wiki write. Read it first, then drill into pages.
-> **Repo goal:** find or generate, and make accessible, the information the OncoLens research needs — a small language model extracting RECIST response and overall stage from oncology records ([[purpose]]).
+> **Repo goal:** get the data the OncoLens research needs (find, generate, or convert it) and make it accessible to models in one uniform way (one JSON object per patient; loaders in `oncolens/`). This wiki is the memory of that work. The research it serves: a small language model extracting RECIST response and overall stage from oncology records ([[purpose]]).
 > **Data rule:** no patient data anywhere in this wiki — see [[purpose]] §3.
 
 ## Core Steering & Maps

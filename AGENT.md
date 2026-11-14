@@ -1,82 +1,61 @@
-# AGENT.md — OncoLens Project Description
+# AGENT.md — OncoLens-data
 
-This file describes the OncoLens project for AI agents working in this repository. Read it before making changes.
+This file describes the OncoLens-data repository for AI agents working in it. Read it before making changes.
 
-> **What this repo is for:** `OncoLens-data` finds or generates — and makes accessible — the data and information the OncoLens research needs (datasets, access paths, label standards, synthetic data, literature). It does not hold patient data or model code; experiments live in the sibling repo `OncoLens-lab`.
+## 1. What this repo is for
 
-## 1. What the project is
+OncoLens-data gets the data the OncoLens research needs, and **makes it accessible in one uniform way**: a model's training or evaluation code asks for a dataset and receives, one patient at a time, a JSON object holding that patient's documents (and the answers, `y`, when the dataset has them). The code that does this is in `oncolens/`.
 
-OncoLens is a master's lab project that is intended to grow into a PhD-level thesis. It is conducted at the **Hebrew University of Jerusalem** under the supervision of:
+Requests come in two kinds:
+- **Get new data about something** (a cancer type, a variable, a kind of document): find data that exists, or generate it.
+- **Change data into a different format**: usually the patient shape below, or another format the training code needs.
 
-- **Prof. Tom Hope** — Hebrew University
-- **Dr. Shai Rosenberg** — Hadassah Medical Center (Ein Kerem)
+Both end the same way, in data a model can read. Finding is therefore part of the job, and its result is data, or a named candidate plus what stands between it and a model; a report on the landscape is not the result.
 
-The research develops a **small language model that extracts structured clinical information from oncology records** (radiology reports, pathology notes, clinical summaries) of cancer patients treated at **Hadassah Ein Kerem**. It targets core variables that capture disease progression and severity:
+A dataset is **accessible** when training or evaluation code can iterate over it in that shape, today. A wiki page about it, a licence, a link or a granted access are steps toward that, not the thing itself. Consumers should not need dataset-specific code: a second dataset comes out in the same shape as the first.
 
-1. **RECIST 1.1 treatment response** — longitudinal; each follow-up is classified as CR, PR, SD or PD. Clinicians rarely write the code, so the model must infer it from free text (new lesions, shrinkage) and dimensional comparisons across the patient's timeline.
-2. **Overall cancer stage (0–IV, with sub-stages such as IA, IIIB, IVB)** — at a point in time (diagnosis, restaging). The model must normalize Roman numerals, Arabic numerals and abbreviations into one standard format.
-3. *A third variable is planned but not yet specified.*
+Everything else in the repo serves this. In particular `wiki-llm/` (§5) is the memory of this work — what each dataset is, how it is reached, how it is shaped — and not the work itself. Literature and source surveys are done when asked, to decide which data to make accessible next.
 
-The work is expected to be **innovative and of high academic standard**. Treat it as research, not as a product prototype: methodological rigor, reproducibility, and clear reasoning about why things work matter as much as the metrics.
+## 2. Who the data is for
 
-## 2. Data
+The research develops a **small language model that extracts structured clinical information from oncology records** (radiology reports, pathology notes, clinical summaries) of cancer patients treated at **Hadassah Ein Kerem** (Hebrew University of Jerusalem; supervisors Prof. Tom Hope and Dr. Shai Rosenberg). Target variables: **RECIST 1.1 response** (CR/PR/SD/PD, longitudinal, usually inferred from free text), **overall stage 0–IV with sub-stages**, and a third, not yet specified. Experiments and models live in the sibling repo `OncoLens-lab`.
 
-- **Source:** medical records of cancer patients from Hadassah Ein Kerem.
-- **Nature:** clinical, longitudinal, and sensitive. Patient records are protected health information (PHI) and are governed by hospital and ethics approvals.
-- **Location:** the data is not in this repository and must never be committed to it. Do not copy patient data into code, notebooks, logs, fixtures, test data, or documentation.
-- **Handling rules for agents:**
-  - Never print, paste, or summarize individual patient records in chat or in files.
-  - Use aggregate statistics, synthetic data, or de-identified examples only.
-  - Do not send any data, or excerpts of it, to external services or APIs.
-  - If a task seems to require raw patient-level output, stop and ask the user first.
+What that asks of the data layer: whole patient timelines with dates, so that no document after the labeled time point is used as input; the patient as the unit, so splits never put one patient in train and test; and the answers kept apart from the model input. Hadassah records cannot leave the hospital, so public and synthetic corpora stand in for development; the same shape is what the Hadassah data will need later.
 
-## 3. Task
+## 3. The shape
 
-Build and evaluate the extraction model for the variables in §1. The target variables are set; cohort definitions, the third variable, and the evaluation protocol are still being defined — check `wiki-llm/purpose.md` and `wiki-llm/gap_map.md` (`G1`) before assuming them.
+One patient = `{patient_id, documents: [{seq, type, date, text}], y}`; `y` is optional; the model input drops everything but the id and the documents. The reference implementation is `oncolens/mmai.py`, used as shown in `README.md`. The shape was asked for in these words: "a JSON object containing a collection of documents grouped by patient (ignoring images); if there's a `y`, great, if not, that's fine."
 
-This repo's part of the task: find, assess, and document (or generate) the data the model needs — annotated or annotatable oncology text, RECIST/stage label sources, external validation sets, and synthetic records — and keep that knowledge accessible in `wiki-llm/`.
+## 4. Adding a dataset
 
-## 4. Repository structure
+"Use this dataset" means: through to a model reading it. Look at the data where it lives (schemas, sizes; without downloading when it can be read remotely), write the loader in `oncolens/` with offline tests, run one full pass to measure what is really there (counts, dates, label coverage, broken records), and record the measured shape and how to call the loader on the dataset's page in `wiki-llm/datasets/`. Datasets are read where they live; nothing patient-level is stored in this repo.
 
-This repository is the **data and knowledge side** of OncoLens. Its layout:
+## 5. Repository structure
 
 | Path | Purpose |
 |---|---|
-| `AGENT.md` | This file: project context for agents |
-| `wiki-llm/` | Knowledge base: `purpose.md`, `gap_map.md`, `index.md`, `datasets/` (one page per source), `literature/`, `findings/`, `systems/` |
-| `skills-lock.json` | Installed agent skills |
-| `oncolens/` | Data-access code: streaming loaders that make external datasets usable without copying them (e.g. `oncolens/mmai.py`) |
+| `oncolens/` | The loaders: stream a dataset from where it lives into the patient shape (`oncolens/mmai.py`) |
 | `tests/` | Offline tests (`uv run pytest`); live Hub checks are marked `network` (`uv run pytest -m network`) |
+| `README.md` | How to use the loaders |
+| `wiki-llm/` | Memory of the data layer: `datasets/` (one page per dataset: what it is, access route, measured shape, loader), `literature/`, `findings/`, `systems/` (Hadassah EMR), `purpose.md`, `gap_map.md` (what stands between the research and data a model can read), `index.md`, `log.md` |
 | `pyproject.toml` | `uv` project for `oncolens` |
+| `skills-lock.json` | Installed agent skills |
+| `.grow-autonomy/rejects.md` | Record of rejected work and what changed because of it. For the maintainer, not instructions |
 
-The experiment loop (`JOURNAL.md`, `experiments/`, `scripts/lab.py`, Python environment) lives in the sibling repo `OncoLens-lab`.
+## 6. Data handling rules
 
-## 5. Working conventions
+- Hadassah patient records are protected health information, governed by hospital and ethics approvals. They are never in this repo: not in code, notebooks, logs, fixtures, tests, docs or chat.
+- Never print, paste or summarize individual patient records. Use aggregate statistics, synthetic data or de-identified examples.
+- Do not send data or excerpts to external services or APIs. If a task seems to need raw patient-level output, stop and ask.
+- Public and synthetic datasets carry their own licences (e.g. CC BY-NC, DUAs). The licence goes on the dataset's page and into the loader's output (`source.license`).
 
-Follow `CODE-STANDARDS.md` for tooling. In brief:
+## 7. Working conventions
 
-- **Python environment:** `uv` only (`uv sync`, `uv add`, `uv run`). Do not use `pip install`, ad-hoc venvs, or `requirements.txt`.
-- **Python version:** as pinned in `.python-version` (≥ 3.11).
-- **Lint and format:** `uv run ruff check --fix` and `uv run ruff format`.
-- **Type checking:** `uv run pyright`.
-- **Tests:** `uv run pytest -q`. Tests must not hit the network by default and must not require real patient data.
-- **Experiment tracking:** `wandb` is the intended tool.
+- Python: `uv` only (`uv sync`, `uv add`, `uv run`); version as pinned in `.python-version`.
+- Lint and format `oncolens/` and `tests/` with `uv run ruff check --fix` and `uv run ruff format`; tests with `uv run pytest -q`. Tests do not hit the network by default and do not need real patient data.
+- Ask before adding dependencies, and before anything that touches real clinical data, shares output outside the lab, or changes cohort definitions or the evaluation protocol: those affect the thesis claims. Supervisors decide what may leave the hospital.
 
-Research conventions:
+## 8. Open items
 
-- Every experiment gets its own folder under `experiments/` with a hypothesis, the planned change, and the evaluation outcome. Keep finished experiment folders immutable.
-- Record findings in `wiki-llm/findings/` and log open questions in `wiki-llm/gap_map.md`.
-- Prefer the simpler method when results are comparable. Explain *why* a change helped or failed.
-- Report negative results honestly; add refuted ideas to the banlist in `JOURNAL.md` so they are not retried unchanged.
-- Keep evaluation leak-free: splits must respect patient identity (no patient in both train and test), and no document dated after the time point being labeled may be used as input.
-
-## 6. Collaboration and approvals
-
-- Ask before any action that touches real clinical data, shares outputs outside the lab, or publishes results.
-- Ask before adding dependencies, changing the evaluation protocol, or altering cohort definitions, since those affect the thesis claims.
-- Supervisors are the final authority on methodology and on what may leave the hospital environment.
-
-## 7. Open items for agents
-
-- The third target variable, cohort inclusion criteria, and evaluation metrics are not yet recorded. Ask the user rather than inventing them, and record them in `wiki-llm/purpose.md`.
-- No OncoLens-specific system page exists yet under `wiki-llm/systems/`.
+- The third target variable, cohort inclusion and evaluation metrics are not yet recorded. Ask the user rather than inventing them; record them in `wiki-llm/purpose.md`.
+- Only one dataset (MMAI synthetic) has a loader so far.

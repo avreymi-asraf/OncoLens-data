@@ -5,6 +5,7 @@ title: "<Dataset name>"
 maintainer: "<org>"
 url: "<direct URL>"
 access: open | credentialed-DUA | application | commercial | in-hospital-only | method/tool
+loader: "oncolens.<module> | none yet"   # none yet = a model cannot read this dataset today
 license: "<license>"
 n_patients: "<number or unknown>"
 time_span: "<years>"
@@ -22,6 +23,8 @@ updated: 2026-10-31
 
 ## What it is
 ## Access path
+## Reading it with a model
+<!-- Loader and how to call it, the measured shape (patients, documents, dates, y coverage), what is broken or missing. If there is no loader: what stands in the way. -->
 ## Why it matters for OncoLens
 ## Caveats
 ## Sources

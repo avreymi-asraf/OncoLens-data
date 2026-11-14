@@ -5,6 +5,7 @@ title: "MatchMiner-AI (MMAI) synthetic oncology corpus — DFCI"
 maintainer: "Dana-Farber Cancer Institute (HF org ksg-dfci)"
 url: "https://huggingface.co/datasets/ksg-dfci/mmai-synthetic-1225"
 access: open
+loader: "oncolens.mmai"
 license: "CC BY-NC 4.0 (1225 release); 0426/0526 releases are CC BY-NC-ND 4.0"
 n_patients: "63,865 synthetic patients, 846,577 notes"
 time_span: "synthetic per-note dates (range not measured)"

@@ -1,6 +1,7 @@
 # System Bottlenecks & Knowledge Gaps (`gap_map.md`)
 
 > Each gap has a stable ID (`G1`, `G2`, ...) referenced by experiments (`plan.md`) and findings (`wiki-llm/findings/`).
+> A gap is something that stands between the research and data a model can read. It closes when such data exists (or a supervisor decides it away), not when a page describes the options.
 
 ## Open Gaps
 

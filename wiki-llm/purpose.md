@@ -3,7 +3,7 @@
 ## 1. Mission
 OncoLens develops a **small language model that extracts structured clinical variables from oncology records** (radiology reports, pathology notes, clinical summaries) of cancer patients treated at **Hadassah Ein Kerem**. Hebrew University of Jerusalem, supervised by Prof. Tom Hope (HUJI) and Dr. Shai Rosenberg (Hadassah). The work is research toward a master's and later PhD thesis: rigor, reproducibility, and explaining *why* a result holds matter as much as the metric.
 
-**This repo's job:** find or generate — and make accessible — the information the research needs: which data exists, what can be accessed, how it is shaped and labeled, and how synthetic data can stand in where real data cannot go. Every page here should help answer: *where do we get text and labels for the target variables below?*
+**This repo's job:** get the data the research needs (find it, generate it, or convert existing data into another format) and make it accessible to models in one uniform way — one JSON object per patient, documents grouped, answers optional (`AGENT.md` §1, loaders in `oncolens/`). This wiki is that work's memory: for each dataset, what it is, how it is reached, how it is shaped and labeled, and how a model reads it today. Synthetic data stands in where real data cannot go. Every dataset page should end in the answer to: *can a model read this now, and if not, what is missing?*
 
 ## 2. Target variables
 1. **RECIST 1.1 treatment response** (longitudinal) — classify each follow-up point as Complete Response (CR), Partial Response (PR), Stable Disease (SD) or Progressive Disease (PD). Clinicians rarely write the code, so it must be inferred from free text (new lesions, shrinkage) and dimensional comparisons across the patient's timeline.
